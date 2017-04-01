@@ -120,7 +120,7 @@ func (p *Page) normalize() error {
 	p.contentBytes = helper.Markdown(p.Bytes)
 	p.pageURL = "/" + p.Slug
 	if !p.Node && !strings.HasSuffix(p.pageURL, ".html") {
-		p.pageURL = fmt.Sprintf("/%s", p.Slug) + ".html"
+		p.pageURL = fmt.Sprintf("/%s", p.Slug) + "/index.html"
 	}
 	p.Index = newPostIndexs(bytes.NewReader(p.contentBytes))
 	return nil

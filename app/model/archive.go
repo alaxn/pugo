@@ -49,6 +49,6 @@ func NewArchive(posts []*Post) Archives {
 	}
 	return Archives{
 		Data:    archives,
-		destURL: "archive.html",
+		destURL: "archive/index.html",
 	}
 }
