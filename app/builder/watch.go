@@ -78,3 +78,28 @@ func watchDir(watcher *fsnotify.Watcher, srcDir string) {
 		}
 	}
 }
+
+// Watch watch changes
+func WatchRequest(ctx *Context) {
+	log15.Info("Server Request Watch|Start")
+
+	if ctx.srcDir == "" || ctx.dstDir == "" || ctx.Theme == nil {
+		log15.Crit("Watch|Need build once then watch changes")
+	}
+
+	// use a ticker to trigger build
+	go func() {
+		c := time.Tick(1 * time.Second)
+		for {
+			t := <-c
+			if watchScheduleTime > 0 && t.UnixNano() > watchScheduleTime {
+				ctx.Again()
+				Build(ctx)
+				watchScheduleTime = 0
+			}
+		}
+	}()
+}
+func SetWatchScheduleTime(t int64) {
+	watchScheduleTime = t
+}

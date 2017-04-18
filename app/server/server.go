@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Unknwon/com"
+	"github.com/go-xiaohei/pugo/app/builder"
 	"gopkg.in/inconshreveable/log15.v2"
 )
 
@@ -49,7 +50,10 @@ func (s *Server) serveFile(w http.ResponseWriter, r *http.Request, file string) 
 
 func (s *Server) serveFiles(w http.ResponseWriter, r *http.Request, param string) bool {
 	ext := path.Ext(param)
+	log15.Info("Watch|Rebuild")
+	builder.SetWatchScheduleTime(time.Now().Add(time.Second).UnixNano())
 	if ext == "" || ext == "." {
+
 		// /xyz -> /xyz.html
 		if !strings.HasSuffix(param, "/") {
 			if s.serveFile(w, r, path.Join(s.dstDir, s.prefix, param+".html")) {
@@ -78,6 +82,8 @@ func (s *Server) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		ResponseWriter: rw,
 		startTime:      time.Now(),
 	}
+
+	//触发build 功能
 
 	defer func() {
 		if err := recover(); err != nil {

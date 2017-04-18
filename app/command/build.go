@@ -65,3 +65,14 @@ func buildHangUp(ctx *builder.Context) {
 	<-signalChan
 	log15.Info("Close")
 }
+
+//增加懒惰模式更新页面
+func buildLazy(ctx *builder.Context) {
+	signalChan := make(chan os.Signal)
+	log15.Info("Lazy mode")
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+	builder.Build(ctx)
+	builder.WatchRequest(ctx)
+	<-signalChan
+	log15.Info("Close")
+}

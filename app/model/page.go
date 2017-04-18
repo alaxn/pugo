@@ -23,6 +23,7 @@ type Page struct {
 	Date       string                 `toml:"date" ini:"date"`
 	Update     string                 `toml:"update_date" ini:"update_date"`
 	AuthorName string                 `toml:"author" ini:"author"`
+	Thumb      string                 `toml:"thumb" ini:"thumb"`
 	NavHover   string                 `toml:"hover" ini:"hover"`
 	Template   string                 `toml:"template" ini:"template"`
 	Lang       string                 `toml:"lang" ini:"lang"`

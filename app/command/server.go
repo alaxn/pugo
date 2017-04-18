@@ -73,7 +73,8 @@ func serv(c *cli.Context) error {
 			buildHangUp(newContext(c, true))
 			return nil
 		}
-		build(newContext(c, true), true)
+		buildLazy(newContext(c, true))
+		//build(newContext(c, true), true)
 	}
 
 	return nil
