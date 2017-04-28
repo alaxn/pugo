@@ -51,10 +51,10 @@ func (q *Qiniu) String() string {
 
 func (q *Qiniu) Create(ctx *cli.Context) (Method, error) {
 	q2 := &Qiniu{
-		Local:     ctx.String("local"),
-		AccessKey: ctx.String("ak"),
-		SecretKey: ctx.String("sk"),
-		Bucket:    ctx.String("bucket"),
+		Local:     ctx.String("deploy.qiniu.local"),
+		AccessKey: ctx.String("deploy.qiniu.ak"),
+		SecretKey: ctx.String("deploy.qiniu.sk"),
+		Bucket:    ctx.String("deploy.qiniu.bucket"),
 	}
 	if !com.IsDir(q2.Local) {
 		return nil, fmt.Errorf("directory '%s' is not existed", q2.Local)

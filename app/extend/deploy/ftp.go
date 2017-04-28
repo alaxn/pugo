@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
+	//"strings"
 	"time"
 
 	"github.com/Unknwon/com"
@@ -93,17 +93,18 @@ func (f *Ftp) Do() error {
 
 	// change to UTF-8 mode
 	log15.Debug("FTP|%s|UTF-8", f.Host)
-	if _, _, err = client.Exec(ftp.StatusCommandOK, "OPTS UTF8 ON"); err != nil {
-		if !strings.Contains(err.Error(), "No need to") { // sometimes show 202, no need to set UTF8 mode because always on
-			return fmt.Errorf("OPTS UTF8 ON:%s", err.Error())
-		}
-	}
-	if _, ok := client.Features()["UTF8"]; !ok {
-		return fmt.Errorf("FTP server need utf-8 support")
-	}
+	// if _, _, err = client.Exec(ftp.StatusCommandOK, "OPTS UTF8 ON"); err != nil {
+	// 	if !strings.Contains(err.Error(), "No need to") { // sometimes show 202, no need to set UTF8 mode because always on
+	// 		return fmt.Errorf("OPTS UTF8 ON:%s", err.Error())
+	// 	}
 
+	// }
+	// if _, ok := client.Features()["UTF8"]; !ok {
+	// 	return fmt.Errorf("FTP server need utf-8 support")
+	// }
+	log15.Debug("FTP|Make Ftp Dir|%s", f.Directory)
 	// make dir
-	makeFtpDir(client, getRecursiveDirs(f.Directory))
+	makeFtpDir(client, getRecursiveDirs(f.Local))
 
 	// change  to directory
 	if err = client.ChangeDir(f.Directory); err != nil {
@@ -148,7 +149,7 @@ func getRecursiveDirs(dir string) []string {
 	dirs := []string{dir}
 	for {
 		dir = path.Dir(dir)
-		if dir == "." || dir == "/" {
+		if dir == "." || dir == "/" || dir == ".DS_Store" || dir == ".git" || dir == ".svn" {
 			break
 		}
 		dirs = append(dirs, dir)
@@ -160,8 +161,10 @@ func getRecursiveDirs(dir string) []string {
 // need make sub and parent directories
 func makeFtpDir(client *ftp.ServerConn, dirs []string) error {
 	for i := len(dirs) - 1; i >= 0; i-- {
+		log15.Debug("FTP|Make Ftp Dir|%s", dirs[i])
 		if err := client.MakeDir(dirs[i]); err != nil {
-			return err
+			log15.Debug("FTP|Make Ftp Dir|ERROR %s", err.Error())
+			//return err
 		}
 	}
 	return nil
