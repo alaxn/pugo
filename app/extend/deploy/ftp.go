@@ -161,6 +161,9 @@ func getRecursiveDirs(dir string) []string {
 // need make sub and parent directories
 func makeFtpDir(client *ftp.ServerConn, dirs []string) error {
 	for i := len(dirs) - 1; i >= 0; i-- {
+		if dirs[i] == "." || dirs[i] == "/" || dirs[i] == ".DS_Store" || dirs[i] == ".git" || dirs[i] == ".svn" {
+			break
+		}
 		log15.Debug("FTP|Make Ftp Dir|%s", dirs[i])
 		if err := client.MakeDir(dirs[i]); err != nil {
 			log15.Debug("FTP|Make Ftp Dir|ERROR %s", err.Error())
